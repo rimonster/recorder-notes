@@ -1,0 +1,11 @@
+{
+  "name": "@headarcade/recorder-notes",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "description": "Soprano recorder notes, fingerings, pitch detection and a staff. By Head Arcade.",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}
