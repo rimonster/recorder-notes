@@ -23,7 +23,7 @@ npm install github:rimonster/recorder-notes
 ## Notes and fingerings
 
 ```ts
-import { NOTES, IDS, holesOf } from "recorder-notes";
+import { NOTES, IDS, holesOf } from "@headarcade/recorder-notes";
 
 NOTES.A;               // { name: "A", hz: 880, holes: [1, 1, 1, 0, 0, 0, 0, 0], color: "#4dd2ff" }
 holesOf("F", "german"); // [1, 1, 1, 1, 1, 0, 0, 0]
@@ -41,7 +41,7 @@ IDS;                   // ["C", "Cs", "D", "Eb", "E", "F", "Fs", "G", … "C3", 
 ## Hearing a note
 
 ```ts
-import { pitchOf, noteOf } from "recorder-notes";
+import { pitchOf, noteOf } from "@headarcade/recorder-notes";
 
 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 const ctx = new AudioContext();
@@ -74,7 +74,7 @@ Tested on every note, 35 cents sharp and flat, with background noise, at 44.1 an
 ## Sheet music
 
 ```ts
-import { staffSvg, STAFF_CSS, NOTES } from "recorder-notes";
+import { staffSvg, STAFF_CSS, NOTES } from "@headarcade/recorder-notes";
 
 const twinkle = {
   id: "twinkle",
