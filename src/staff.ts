@@ -6,12 +6,21 @@
 import type { NoteId } from "./notes.ts";
 import { barBeats, type Meter } from "./meter.ts";
 
-/** A tune the staff can draw. `id` only selects a known key override. */
+/**
+ * A tune the staff can draw.
+ * - `id`: names the drawing (its SVG ids), any string.
+ * - `tune`: each note and its length in beats (a quarter note is 1; triplets as 0.3333).
+ * - `rests`: silence after a note, in beats, by the note's index.
+ * - `marks`: "slur" into the next note, or "stacc" (staccato), by the note's index.
+ * - `key`: the key signature to write, as its name starts ("1 sharp", "2 flats"…), when the notes alone don't show it
+ *   (a tune with no F and no C fits both C and G major). Without it, the key the notes fit best.
+ */
 export interface StaffTune {
   id: string;
   tune: [NoteId, number][];
   rests?: number[];
   marks?: ("" | "slur" | "stacc")[];
+  key?: string;
 }
 
 // Staff geometry: 10 units between lines, the bottom line (E4) is step 0, each step a line or a space.
@@ -54,8 +63,8 @@ function keyOf(ids: NoteId[]) {
  * Songs whose key the notes alone get wrong: The Entertainer (moved to B♭ major) has one E natural and no E♭, which
  * would pick F major. By the key's name.
  */
-const KEY_SET: Record<string, string> = { "hh-entertainer": "2 flats", "hn-amazing-grace": "1 sharp", "ts-amazing-grace": "1 sharp" };
-const keyFor = (song: StaffTune) => KEYS.find((k) => KEY_SET[song.id] && k.name.startsWith(KEY_SET[song.id]!)) ?? keyOf(song.tune.map(([id]) => id));
+/** The tune's own key when it gives one (see StaffTune.key), else the key its notes fit best. */
+const keyFor = (song: StaffTune) => (song.key && KEYS.find((k) => k.name.startsWith(song.key!))) || keyOf(song.tune.map(([id]) => id));
 
 export const keySignature = (song: StaffTune) => keyFor(song).name;
 

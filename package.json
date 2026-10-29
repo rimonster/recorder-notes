@@ -1,11 +1,50 @@
 {
   "name": "@headarcade/recorder-notes",
   "version": "0.1.0",
-  "private": true,
+  "description": "Soprano recorder notes and fingerings (baroque and German), a pitch detector for the recorder, and sheet music as SVG. By Head Arcade.",
+  "keywords": [
+    "recorder",
+    "soprano recorder",
+    "descant recorder",
+    "fingering",
+    "pitch detection",
+    "music education",
+    "sheet music",
+    "svg",
+    "web audio"
+  ],
   "license": "MIT",
+  "author": "Head Arcade (https://headarcade.com)",
+  "homepage": "https://recorderhero.com/recorder-fingering-chart/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rimonster/recorder-notes.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rimonster/recorder-notes/issues"
+  },
   "type": "module",
-  "description": "Soprano recorder notes, fingerings, pitch detection and a staff. By Head Arcade.",
+  "sideEffects": false,
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "node --experimental-strip-types --test test/*.ts",
+    "prepublishOnly": "npm test && npm run build"
+  },
+  "engines": {
+    "node": ">=22.6"
   }
 }
