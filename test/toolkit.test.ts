@@ -46,3 +46,28 @@ test("a staff draws a bar of G", () => {
   assert.match(svg, /aria-label="Sheet music"/);
   assert.equal(staffSvg({ id: "free", tune: [["G", 1]] }, ["none", 0], (id) => id), "");
 });
+
+test("Tuner: an in-tune player stays in tune, a sharp one is learned, a wrong fingering stays wrong", async () => {
+  const { Tuner } = await import("../src/tuning.ts");
+  const G = NOTES.G.hz, Gs = NOTES.Gs.hz;
+  const cents = (hz: number, c: number) => hz * 2 ** (c / 1200);
+  // In tune (a little wobble): the offset stays near 0.
+  const t = new Tuner();
+  for (let i = 0; i < 100; i++) t.learn(cents(G, i % 2 ? 6 : -6), G, 20);
+  assert.ok(Math.abs(t.cents) < 7);
+  // 55 cents sharp: read as G# at first, learned within two seconds, then read as G.
+  const s = new Tuner();
+  assert.equal(noteOf(s.correct(cents(G, 55))).id, "Gs");
+  for (let i = 0; i < 100; i++) s.learn(cents(G, 55), G, 20);
+  assert.equal(s.cents, Tuner.MAX);
+  assert.equal(noteOf(s.correct(cents(G, 55))).id, "G");
+  // A real G# while G is wanted: too far to learn from, and still read as G# with the learned offset.
+  const w = new Tuner();
+  for (let i = 0; i < 200; i++) w.learn(Gs, G, 20);
+  assert.equal(w.cents, 0);
+  assert.equal(noteOf(s.correct(Gs)).id, "Gs");
+  // Flat (a soft player): learned the other way.
+  const f = new Tuner();
+  for (let i = 0; i < 100; i++) f.learn(cents(G, -50), G, 20);
+  assert.equal(noteOf(f.correct(cents(G, -50))).id, "G");
+});

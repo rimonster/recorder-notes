@@ -94,6 +94,8 @@ interface Bar { pieces: Piece[]; len: number }
 function bars(tune: [NoteId, number][], meter: Meter, pickup: number, rests: number[] = []): Bar[] {
   const L = barBeats(meter), out: Bar[] = [];
   let bar: Bar = { pieces: [], len: pickup > 0 ? pickup : L }, pos = 0;
+  // A pickup bar's notes sit at the end of a bar: their beats (for beaming) count from where it starts.
+  let shift = pickup > 0 ? L - pickup : 0;
   // Each note, then its rest (a rest is never tied: split at bar lines and into writable values, each its own).
   const items: [NoteId | null, number, number][] = [];
   tune.forEach(([id, d], n) => {
@@ -108,7 +110,7 @@ function bars(tune: [NoteId, number][], meter: Meter, pickup: number, rests: num
       const vals = split(take);
       vals.forEach((len, k) => {
         const trip = isTriplet(len);
-        bar.pieces.push({ id, v: trip ? len * 1.5 : len, d: len, trip, first: first && k === 0, tieNext: !!id && (k < vals.length - 1 || left - take > 0.001), at: pos, n });
+        bar.pieces.push({ id, v: trip ? len * 1.5 : len, d: len, trip, first: first && k === 0, tieNext: !!id && (k < vals.length - 1 || left - take > 0.001), at: pos + shift, n });
         pos += len;
       });
       first = false;
@@ -117,6 +119,7 @@ function bars(tune: [NoteId, number][], meter: Meter, pickup: number, rests: num
         out.push(bar);
         bar = { pieces: [], len: L };
         pos = 0;
+        shift = 0;
       }
     }
   });

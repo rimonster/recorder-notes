@@ -4,14 +4,16 @@
  */
 import { IDS, NOTES, type NoteId } from "./notes.ts";
 
-export function pitchOf(samples: Float32Array, sampleRate: number): { hz: number; level: number } {
+export function pitchOf(samples: Float32Array, sampleRate: number, band: [number, number] = [450, 2600]): { hz: number; level: number } {
   let rms = 0;
   for (let i = 0; i < samples.length; i++) rms += samples[i]! * samples[i]!;
   rms = Math.sqrt(rms / (samples.length || 1));
   if (rms < 0.01) return { hz: 0, level: rms };
-  // Lags for 450–2600 Hz (a soprano recorder's range, with room for overblowing).
-  const W = 1024, lo = Math.floor(sampleRate / 2600), hi = Math.ceil(sampleRate / 450);
-  if (samples.length < W + hi + 2) return { hz: 0, level: rms };
+  // Lags for the pitches listened for (`band`, Hz): by default 450–2600, a soprano recorder's range with room for
+  // overblowing; an ocarina's depends on its size.
+  const [fLo, fHi] = band;
+  const W = 1024, lo = Math.max(2, Math.floor(sampleRate / fHi)), hi = Math.min(samples.length - W - 2, Math.ceil(sampleRate / fLo));
+  if (hi <= lo + 1) return { hz: 0, level: rms };
   const d = new Float32Array(hi + 2);
   for (let t = lo; t <= hi + 1; t++) {
     let s = 0;
@@ -53,7 +55,7 @@ export function pitchOf(samples: Float32Array, sampleRate: number): { hz: number
   let hz = sampleRate / (best + shift);
   // The low notes have a strong overtone an octave up, which can be taken for the note: if there's real sound
   // an octave below too, that's the note being played.
-  if (hz / 2 >= 450 && power(samples, W, hz / 2, sampleRate) > power(samples, W, hz, sampleRate) * 0.12) hz /= 2;
+  if (hz / 2 >= fLo && power(samples, W, hz / 2, sampleRate) > power(samples, W, hz, sampleRate) * 0.12) hz /= 2;
   return { hz, level: rms };
 }
 

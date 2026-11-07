@@ -71,6 +71,13 @@ listen();
 
 Tested on every note, 35 cents sharp and flat, with background noise, at 44.1 and 48 kHz (`npm test`).
 
+- **`new Tuner()`** learns a player's steady tuning while they play. Blowing hard makes a recorder (or an ocarina)
+  sound sharp by the same amount on every note, and past half a semitone each note reads as the next one up.
+  - **`tuner.learn(rawHz, wantHz, ms)`:** a frame of a held note while `wantHz` is wanted; it learns only from
+    pitches within about 0.6 of a semitone, so a wrong fingering never teaches it.
+  - **`tuner.correct(hz)`:** a pitch with the player's offset taken out; pass it to `noteOf`.
+  - **`tuner.offBy(rawHz, wantHz)`:** how many cents the player is from the wanted note, after correction.
+
 ## Sheet music
 
 ```ts
@@ -96,6 +103,16 @@ el.innerHTML = staffSvg(twinkle, ["4/4", 0], (id) => NOTES[id].name);
   - **`rests`:** the silence after each note, by the note's index.
   - **`marks`:** `"slur"` into the next note, or `"stacc"` for staccato.
   - **`key`:** for a tune whose notes don't show its key (`"1 sharp"`, `"2 flats"`).
+
+## See also
+
+- **[melody-readers](https://github.com/rimonster/melody-readers)**, its companion: it reads a melody from ABC notation,
+  a LilyPond score (the ones inside Wikipedia's song and anthem articles) or a MIDI file, and writes it as the same
+  note names this toolkit uses (`C`, `Fs`, `C2`…), moved into the recorder's range. Together: a public-domain tune from
+  the web, drawn as a staff and played with its fingerings.
+
+Both come from [Recorder Hero](https://recorderhero.com) and the music lessons of [Head Arcade](https://headarcade.com),
+where they run every day.
 
 ## Licence
 
