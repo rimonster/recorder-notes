@@ -76,7 +76,7 @@ Tested on every note, 35 cents sharp and flat, with background noise, at 44.1 an
   - **`tuner.learn(rawHz, wantHz, ms)`:** a frame of a held note while `wantHz` is wanted; it learns only from
     pitches within about 0.6 of a semitone, so a wrong fingering never teaches it.
   - **`tuner.correct(hz)`:** a pitch with the player's offset taken out; pass it to `noteOf`.
-  - **`tuner.offBy(rawHz, wantHz)`:** how many cents the player is from the wanted note, after correction.
+  - **`tuner.offBy(rawHz, wantHz)`:** how many cents a pitch is from the wanted note.
 
 ## Sheet music
 
