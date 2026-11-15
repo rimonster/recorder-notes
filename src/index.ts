@@ -1,4 +1,4 @@
-export { GERMAN_HOLES, IDS, NOTES, holesOf, type Fingering, type Holes, type NoteId } from "./notes.ts";
+export { ALT_HOLES, GERMAN_HOLES, IDS, NOTES, holesOf, type Fingering, type Holes, type NoteId } from "./notes.ts";
 export { noteOf, pitchOf } from "./pitch.ts";
 export { Tuner } from "./tuning.ts";
 export { barBeats, type Meter } from "./meter.ts";

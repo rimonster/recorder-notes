@@ -36,6 +36,8 @@ IDS;                   // ["C", "Cs", "D", "Eb", "E", "F", "Fs", "G", … "C3", 
   `1` is covered, `0` open, `0.5` half (a pinched thumb, or half of a double hole).
 - **`holesOf(id, "baroque" | "german")`**: the fingering in either system. They differ only for F and F#, low and
   high.
+- **`ALT_HOLES`**: another fingering in common use, where charts differ and which one is in tune depends on the
+  recorder. High B♭ (`Bb2`): ours is Dolmetsch's (thumb pinched, holes 1 2 5 6); other common charts also cover hole 4.
 - **`color`**: one colour per note, if you want your notes colour-coded like Recorder Hero's.
 
 ## Hearing a note

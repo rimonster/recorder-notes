@@ -43,4 +43,11 @@ export const GERMAN_HOLES: Partial<Record<NoteId, Holes>> = {
   F: [1, 1, 1, 1, 1, 0, 0, 0], Fs: [1, 1, 1, 1, 0, 1, 1, 1],
   F2: [0.5, 1, 1, 1, 1, 0, 0, 0], Fs2: [0.5, 1, 1, 1, 0, 1, 0, 1],
 };
+/**
+ * Other fingerings in common use, for notes where charts differ and which one is in tune depends on the recorder.
+ * High B♭: ours is Dolmetsch's standard (thumb pinched, 1 2 5 6); Yamaha's charts cover hole 4 too (1 2 4 5 6).
+ */
+export const ALT_HOLES: Partial<Record<NoteId, Holes>> = {
+  Bb2: [0.5, 1, 1, 0, 1, 1, 1, 0],
+};
 export const holesOf = (id: NoteId, f: Fingering): Holes => (f === "german" && GERMAN_HOLES[id]) || NOTES[id].holes;
